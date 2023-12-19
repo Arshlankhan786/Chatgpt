@@ -101,6 +101,7 @@ HELP_BACK = [
     
     
 #         start
+FORCE_SUBSCRIBE_TEXT = "<code>Sorry Dear You Must Join My Updates Channel for using me 😌😉....</code>"
 @vikas.on_message(filters.command(["start",f"start@{BOT_USERNAME}"]))
 async def start(client, m: Message):
     try:
