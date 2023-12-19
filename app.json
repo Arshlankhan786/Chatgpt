@@ -59,7 +59,12 @@
     "API_HASH": {
       "description": "𝗔𝗣𝗜 𝗛𝗔𝗦𝗛 𝗗𝗔𝗟 𝗗𝗘 𝗕𝗔𝗦𝗦 𝗞𝗛𝗔𝗧𝗔𝗠",
       "required": true
-    }
+    },
+    "UPDATES_CHANNEL": {
+      "description": "abe bot ka force sub daal",
+      "required": true
+    },
+   
   },
   "repository": "https://github.com/Vikas-841/chatgpt/"
 }
