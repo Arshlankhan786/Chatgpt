@@ -12,11 +12,7 @@ from bardapi import Bard
 from datetime import datetime
 import logging
 
-import asyncio
-from Uploader.config import Config
-from pyrogram import Client, enums
-from pyrogram.errors import FloodWait, UserNotParticipant
-from pyrogram.types import Message, InlineKeyboardMarkup, InlineKeyboardButton
+
 
 async def handle_force_subscribe(bot, message):
     try:
