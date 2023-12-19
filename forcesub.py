@@ -1,6 +1,16 @@
-
-from telegram import Update
-from telegram.ext import Updater, CommandHandler, MessageHandler, Filters, CallbackContext
+from pyrogram import Client, filters,enums,idle
+from pyrogram.errors import ApiIdInvalid, ApiIdPublishedFlood, AccessTokenInvalid
+from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton, Message
+from pyrogram.enums import ChatAction, ParseMode
+import openai
+from pyrogram.types import CallbackQuery
+from config import *
+import os,sys,re,requests
+import asyncio,time
+from random import choice
+from bardapi import Bard
+from datetime import datetime
+import logging
 
 # Define your bot token
 TOKEN = 'your_bot_token'
