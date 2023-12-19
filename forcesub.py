@@ -12,61 +12,50 @@ from bardapi import Bard
 from datetime import datetime
 import logging
 
-# Define your bot token
-bot_token = "6624368265:AAGZX6eoKj8EndWyYs12_78Wx6DK8ZtK1KQ"
-# Define the command handler for the /start command
-def start(update: Update, context: CallbackContext) -> None:
-    # Check if the user is already subscribed
-    if update.effective_user.is_bot:
-        return
+import asyncio
+from Uploader.config import Config
+from pyrogram import Client, enums
+from pyrogram.errors import FloodWait, UserNotParticipant
+from pyrogram.types import Message, InlineKeyboardMarkup, InlineKeyboardButton
 
-    user_id = update.effective_user.id
-    chat_id = update.effective_chat.id
-
-    # Check if the user is already subscribed
-    if not is_subscribed(user_id):
-        # Send a message asking the user to subscribe
-        context.bot.send_message(chat_id=chat_id, text='Please subscribe to use this bot.')
-        return
-
-    # Continue with the normal functionality of the /start command
-    context.bot.send_message(chat_id=chat_id, text='Welcome to the bot!')
-
-# Define the message handler for all messages
-def message_handler(update: Update, context: CallbackContext) -> None:
-    # Check if the user is already subscribed
-    if update.effective_user.is_bot:
-        return
-
-    user_id = update.effective_user.id
-    chat_id = update.effective_chat.id
-
-    # Check if the user is already subscribed
-    if not is_subscribed(user_id):
-        # Send a message asking the user to subscribe
-        context.bot.send_message(chat_id=chat_id, text='Please subscribe to use this bot.')
-        return
-
-    # Continue with the normal functionality of the bot
-    # ...
-
-# Function to check if a user is subscribed
-def is_subscribed(user_id: int) -> bool:
-    # Implement your logic to check if the user is subscribed
-    # Return True if subscribed, False otherwise
-    return True
-
-# Create an instance of the Updater class
-updater = Updater(TOKEN)
-
-# Get the dispatcher to register handlers
-dispatcher = updater.dispatcher
-
-# Register the command handler for the /start command
-dispatcher.add_handler(CommandHandler('start', start))
-
-# Register the message handler for all messages
-dispatcher.add_handler(MessageHandler(Filters.all, message_handler))
-
-# Start the bot
-updater.start_polling()
+async def handle_force_subscribe(bot, message):
+    try:
+        invite_link = await bot.create_chat_invite_link(int(Config.UPDATES_CHANNEL))
+    except FloodWait as e:
+        await asyncio.sleep(e.x)
+        return 400
+    try:
+        user = await bot.get_chat_member(int(Config.UPDATES_CHANNEL), message.from_user.id)
+        if user.status == "kicked":
+            await bot.send_message(
+                chat_id=message.from_user.id,
+                text="Sorry Sir, You are Banned. Contact My [Support Group](https://t.me/Pathans_movies).",
+                
+                disable_web_page_preview=True,
+                reply_to_message_id=message.id,
+            )
+            return 400
+    except UserNotParticipant:
+        await bot.send_message(
+            chat_id=message.from_user.id,
+            text="Pʟᴇᴀsᴇ Jᴏɪɴ Mʏ Uᴘᴅᴀᴛᴇs Cʜᴀɴɴᴇʟ Tᴏ Usᴇ Mᴇ!\n\nDᴜᴇ ᴛᴏ Oᴠᴇʀʟᴏᴀᴅ, Oɴʟʏ Cʜᴀɴɴᴇʟ Sᴜʙsᴄʀɪʙᴇʀs Cᴀɴ Usᴇ Mᴇ!",
+            reply_markup=InlineKeyboardMarkup(
+                [
+                    [
+                        InlineKeyboardButton("🤖 Jᴏɪɴ ᴍʏ ᴜᴘᴅᴀᴛᴇs ᴄʜᴀɴɴᴇʟ 🤖", url=invite_link.invite_link)
+                    ]
+                ]
+            ),
+            
+            reply_to_message_id=message.id,
+        )
+        return 400
+    except Exception:
+        await bot.send_message(
+            chat_id=message.from_user.id,
+            text="Something Went Wrong. Contact My [Support Group](https://t.me/Pathans_movies).",
+            
+            disable_web_page_preview=True,
+            reply_to_message_id=message.id,
+        )
+        return 400
