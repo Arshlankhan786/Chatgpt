@@ -13,8 +13,7 @@ from datetime import datetime
 import logging
 
 # Define your bot token
-TOKEN = 'your_bot_token'
-
+bot_token = "BOT_TOKEN"
 # Define the command handler for the /start command
 def start(update: Update, context: CallbackContext) -> None:
     # Check if the user is already subscribed
