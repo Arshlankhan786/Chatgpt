@@ -188,7 +188,7 @@ async def auto_reply_handler(client, message):
         # Send the GPT-generated answer as a reply
         end_time = time.time()
         response_time = str(round((end_time - start_time) * 1000, 3)) + " ms"
-        await message.reply_text(f"ChatGPT answered:\n\n{answer}\n\nResponse time: {response_time}")
+        await message.reply_text(f"{answer}\n\nResponse time: {response_time}")
     except Exception as e:
         await message.reply_text(f"Error: {e}")
         
